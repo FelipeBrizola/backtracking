@@ -62,7 +62,10 @@ def backtracking(pieces, n, solution):
 
     i = 0
     while len(pieces) > 0:
-        piece = pieces[i]
+        if i < len(pieces):
+            piece = pieces[i]
+        else:
+            return []
         
         # pode encaixar? remove peca adicionada e remove sua imagem tbm
         if match(solution[-1], piece) and contains(pieces, piece) == False:
@@ -77,7 +80,6 @@ def backtracking(pieces, n, solution):
             flipped = copy.copy(piece)
             flipped = flip(flipped)
             flipped['hasFlipped'] = True
-
             pieces.append(flipped)
         
 
@@ -115,11 +117,8 @@ if __name__== "__main__":
 
     for piece in pieces:
         solution = []
-        solution = backtracking(pieces, n, solution)
-
-        if len(solution) > 0:
-            showSolution(solution)
-            break
+        backtracking(pieces, n, solution)
+       
     
 
 
