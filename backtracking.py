@@ -86,41 +86,22 @@ if __name__== "__main__":
     pieces = [
         {
             'id': 1,
-            'left': 3,
-            'right': 4,
+            'left': 5,
+            'right': 5,
         },
         {
             'id': 2,
-            'left': 2,
-            'right': 5,
+            'left': 1,
+            'right': 4,
         },
         {
             'id': 3,
-            'left': 3,
-            'right': 6,
-        },
-        {
-            'id': 4,
             'left': 4,
             'right': 5,
         },
-        {
-            'id': 5,
-            'left': 3,
-            'right': 2,
-        },
-        {
-            'id': 6,
-            'left': 5,
-            'right': 1,
-        },
-        {
-            'id': 7,
-            'left': 6,
-            'right': 2,
-        }
     ]
 
+    result = []
     for piece in pieces:
         copy_pieces = copy.deepcopy(pieces)
         remove(copy_pieces, piece)
