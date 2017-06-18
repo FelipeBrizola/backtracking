@@ -18,28 +18,16 @@ def flip(piece):
 
     return piece
 
-
-
-def match(pieces, piece):  
-    for index, p in enumerate(pieces):               
-
-        # nao compara peca da lista com peca original
-        if piece['value'] != p['value']:
-
-            # testa piece cm alguma da lista
-            if piece['value'][-1] == p['value'][0]:
-                return p
-
-            flipped = flip(copy.copy(p))
-
-            # testa piece cm alguma da lista virada
-            if piece['value'][-1] == flipped['value'][0]:
-                flipped['hasFlipped'] = True
-                return flipped
+def showPiece(piece, value):
+    string = str(piece['left'])+","+str(piece['right'])
     
-    return None
+    if value == piece['left']:
+        string = str(piece['right'])+","+str(piece['left'])
 
+    return string
 
+    
+   
 def showSolution(game):
     output = ''
     for  item in game:
@@ -47,82 +35,110 @@ def showSolution(game):
     
     print output
 
-# remove imagem de peca adicionada
-def removeYourImage(pieces, piece):
-    flipped = flip(copy.copy(piece))
-
-    for index, p in enumerate(pieces):       
-        if flipped['value'] == p['value']:
-            pieces.pop(index)
-            break
-        
-    return
-
 def remove(pieces, piece):
     for index, p in enumerate(pieces):
-        if p['value'] == piece['value']:
+        if p['id'] == piece['id']:
             pieces.pop(index)
             break
     return
 
-def contains(pieces, piece):    
-    for p in pieces:
-        flipped = flip(copy.copy (p))
-        if flipped == piece:
-            return True
-        
+def match(p1, value):
+    if p1['left'] == value or p1['right'] == value:
+        return True
     return False
 
-def backtracking(pieces, n, currentList):       
+def solution(pieces, piece, valor):
+    found = False
+    i = 0
+    while i < len(pieces):
+        current = pieces[i]
+        print "Current:" + str(current)
+        
+        if match(current, valor):
+            auxPiece = current
+            if current['left'] == valor:
+                auxValue = current['right']
+            else:
+                auxValue = current['left']
+            found = True
+            break
+        i += 1
     
-    if len(currentList) == n:
-        return currentList
-
-    while True:
-        matched = match(pieces, currentList[-1])
-
-        if matched != None:
-            currentList.append(matched)
-            backtracking(pieces, n, currentList)
-
-            print currentList
-            exit(0)
-
+    if found:
+        if len(pieces) == 1:
+            return showPiece(piece, valor) + "|" + showPiece(auxPiece, auxValue)
         else:
-            flipped = copy.copy(currentList[-1])
-            pieces.append(flipped)
+            copy_copy = copy.deepcopy(pieces)
+            remove(copy_copy, auxPiece)
+            
+            result = solution(copy_copy, auxPiece, auxValue)
 
-    return solution
+            if len(result) == 0:
+                return ""
+            else:
+                return showPiece(piece, valor) + "|" + result
+    return "" 
+    
 
 
-solution = []
 if __name__== "__main__":
- 
+
     pieces = [
         {
-            'value': [1, 2],
-            'hasFlipped': False
+            'id': 1,
+            'left': 3,
+            'right': 4,
         },
         {
-            'value': [7, 4],
-            'hasFlipped': False
+            'id': 2,
+            'left': 2,
+            'right': 5,
         },
         {
-            'value': [7, 2],
-            'hasFlipped': False
-        }       
+            'id': 3,
+            'left': 3,
+            'right': 6,
+        },
+        {
+            'id': 4,
+            'left': 4,
+            'right': 5,
+        },
+        {
+            'id': 5,
+            'left': 3,
+            'right': 2,
+        },
+        {
+            'id': 6,
+            'left': 5,
+            'right': 1,
+        },
+        {
+            'id': 7,
+            'left': 6,
+            'right': 2,
+        }
     ]
 
-    n = 3
-
     for piece in pieces:
-        currentList = []
-        currentList.append(piece)
-        backtracking(pieces, n, currentList)
-        currentList = []
-      
-       
+        copy_pieces = copy.deepcopy(pieces)
+        remove(copy_pieces, piece)
+        result = solution(copy_pieces, piece, piece['right'])
+
+        if len(result) > 0:
+            break
+        else:
+            result = solution(copy_pieces, piece, piece['left'])
+            if len(result) > 0:
+                break
     
+    if len(result) == 0:
+        print "Sem solucao"
+    else:
+        print result
+    
+
 
 
 
