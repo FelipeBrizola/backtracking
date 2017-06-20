@@ -4,12 +4,22 @@ import sys
 import copy
 
 
-def readFile():
-    arq = open('entrada.txt', 'r')
-    texto = arq.readlines()[1:]
+def readFile(filename):
+    allPieces = []
+    arq = open(filename, 'r')
+    number = int(arq.readline())
+    texto = arq.readlines()
     for linha in texto :
-        piecesList.append(linha.rstrip('\n'))
+        sub = []
+        left = int(linha.rstrip('\n').split(" ")[0])
+        right = int(linha.rstrip('\n').split(" ")[1])
+        sub.append(left)
+        sub.append(right)
+        
+        allPieces.append(sub)
     arq.close()
+
+    return number, allPieces
 
 def flip(piece):
     piece = list(reversed(piece))
@@ -75,23 +85,14 @@ def backtracking(pieces, game, n):
     
 
 if __name__== "__main__":
-    
-    pieces = [ [4, 6], [5, 4], [4, 4], [6, 6], [6, 6], [5, 0] ] 
-    n = 6
-    
+    num, pieces = readFile(sys.argv[1])
     game = []
 
-    result = backtracking(pieces, game, n)
+    result = backtracking(pieces, game, num)
 
-    if len(result) != n:
+    if len(result) != num:
         print "Sem solucao!"
     else:
         print result
-        
-       
-    
-    
-
-
 
 
