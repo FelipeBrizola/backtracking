@@ -85,14 +85,18 @@ def backtracking(pieces, game, n):
     
 
 if __name__== "__main__":
-    num, pieces = readFile(sys.argv[1])
-    game = []
 
-    result = backtracking(pieces, game, num)
+    if len(sys.argv) > 1:
+        num, pieces = readFile(sys.argv[1])
+        game = []
 
-    if len(result) != num:
-        print "Sem solucao!"
+        result = backtracking(pieces, game, num)
+
+        if len(result) != num:
+            print "Sem solucao!"
+        else:
+            print result
     else:
-        print result
+        print "[ERROR] Usage: python backtracking.py filename.txt"
 
 
